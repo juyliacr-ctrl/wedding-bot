@@ -6,7 +6,7 @@ TOKEN = os.getenv("BOT_TOKEN")
 CHAT_ID = int(os.getenv("CHAT_ID"))
 
 if TOKEN is None:
-raise Exception("BOT_TOKEN not found in environment variables")
+     raise Exception("BOT_TOKEN not found in environment variables")
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
