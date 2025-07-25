@@ -1,31 +1,18 @@
-from aiogram import Bot, Dispatcher, types
-from aiogram.types import Message
-from aiogram.enums import ParseMode
-from aiogram.filters import CommandStart
-from aiogram import F
-import asyncio
-import logging
 import os
+import telebot
 
-TOKEN = os.getenv("BOT_TOKEN")
-GROUP_ID = -1002752004418
+BOT_TOKEN = os.getenv('BOT_TOKEN')
+CHAT_ID = os.getenv('CHAT_ID')
 
-bot = Bot(token=TOKEN, parse_mode=ParseMode.HTML)
-dp = Dispatcher()
+bot = telebot.TeleBot(BOT_TOKEN)
 
-@dp.message(CommandStart())
-async def start_handler(message: Message):
-      await message.answer("Привіт! Надішли фото — я перекину в загальний чат ")
+@bot.message_handler(content_types=['photo'])
+def handle_photo(message):
+    try:
+        file_id = message.photo[-1].file_id
+        caption = f"Фото від @{message.from_user.username or message.from_user.first_name}"
+        bot.send_photo(chat_id=CHAT_ID, photo=file_id, caption=caption)
+    except Exception as e:
+        bot.send_message(message.chat.id, "Сталася помилка при пересиланні фото.")
 
-@dp.message(F.photo)
-async def handle_photo(message: Message):
-      photo = message.photo[-1]
-      caption = message.caption or ""
-      await bot.send_photo(chat_id=GROUP_ID, photo=photo.file_id, caption=caption)
-
-async def main():
-      logging.basicConfig(level=logging.INFO)
-      await dp.start_polling(bot)
-
-if __name__ == "__main__":
-      asyncio.run(main())
+bot.polling(none_stop=True)
