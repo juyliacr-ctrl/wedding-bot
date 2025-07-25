@@ -6,7 +6,7 @@ from aiogram import F
 import asyncio
 import os
 
-TOKEN = os.getenv("TOKEN")
+TOKEN = os.getenv("BOT_TOKEN")
 CHAT_ID = int(os.getenv("CHAT_ID"))
 
 bot = Bot(token=TOKEN)
