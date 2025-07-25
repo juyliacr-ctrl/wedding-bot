@@ -1,20 +1,16 @@
 import os
 import asyncio
-from aiogram import Bot, Dispatcher, types F
+from aiogram import Bot, Dispatcher, types, F
+from aiogram.enums import ContentType
 
 TOKEN = os.getenv("BOT_TOKEN")
-CHAT_ID = os.getenv("CHAT_ID")
+CHAT_ID = int(os.getenv("CHAT_ID"))
 
 if TOKEN is None:
      raise Exception("BOT_TOKEN not found in environment variables")
 
-if CHAT_ID is None:
-     raise Exception("CHAT_ID not found in environment variables")
-else:
-     CHAT_ID = int(CHAT_ID)
-
 bot = Bot(token=TOKEN)
-dp = Dispatcher(bot=bot)
+dp = Dispatcher()
 
 @dp.message(F.photo)
 async def handle_photo(message: types.Message):
@@ -24,7 +20,7 @@ async def handle_photo(message: types.Message):
 
 async def main():
      print("Бот запущений, очікую фото...")
-     await dp.start_polling()
+     await dp.start_polling(bot)
 
 if __name__ == "__main__":
      asyncio.run(main())
