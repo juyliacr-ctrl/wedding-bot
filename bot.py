@@ -16,7 +16,7 @@ else:
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot=bot)
 
-@dp.message(types.ContentType.PHOTO)
+@dp.message(F.photo)
 async def handle_photo(message: types.Message):
      photo = message.photo[-1]
      caption = f"Фото від @{message.from_user.username or message.from_user.full_name}"
